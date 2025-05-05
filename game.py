@@ -1,90 +1,116 @@
+from pygame import *
 import pygame
-import sys
 from pygame.locals import *
-from PIL import Image
-
-
+import sys
 
 pygame.init()
 
-screen = pygame.display.set_mode((450, 500))
-pygame.display.set_caption("Frog Lands")
+clock = pygame.time.Clock()
 
+font = pygame.font.Font("Pixeltype.ttf", 50)
 
+screen = pygame.display.set_mode((500, 450))
+pygame.display.set_caption("Thieves vs Chefs")
 
-pygame.display.set_icon = pygame.image.load('download.jpeg')
-fps = pygame.time.Clock()
+ground = pygame.Surface((500, 150))
+ground.fill("#FFDCCC")
 
-font = pygame.font.Font('Pixeltype.ttf', 50)
+food1 = pygame.image.load(r"C:\Users\HP USER\OneDrive\Desktop\theif vs chefs\Ghostpixxells_pixelfood\07_bread.png").convert_alpha()
 
- 
+food2 = pygame.image.load(r"C:\Users\HP USER\OneDrive\Desktop\theif vs chefs\Ghostpixxells_pixelfood\05_apple_pie.png").convert_alpha()
 
-b_o = pygame.Surface((450, 100))
-b_o.fill('#6F826A')
+food3 = pygame.image.load(r"C:\Users\HP USER\OneDrive\Desktop\theif vs chefs\Ghostpixxells_pixelfood\11_bun.png").convert_alpha()
+food3_rect = food3.get_rect(midbottom = (350, 100))
 
-k_o = font.render("score: 0", False, "#F0F1C5", None)
+player = pygame.image.load(r"C:\Users\HP USER\OneDrive\Desktop\theif vs chefs\Sprout Lands - Sprites - Basic pack\Sprout Lands - Sprites - Basic pack\Objects\Free_Chicken_House.png").convert_alpha()
+player_rect = player.get_rect(midleft = (0, 340))
 
-house_surface = pygame.image.load('Sprout Lands - Sprites - Basic pack\Sprout Lands - Sprites - Basic pack\Objects\Free_Chicken_House.png').convert_alpha()
+score = 0
 
-house_x_poisition = 0
-house_y_poisition = 250
+text = font.render(f"Score: {score}", False, "#FFDCCC")
 
+player_x_location = 0
+player_y_location = 340
 
-moving_right = False
-moving_left = False
+m_right = False
+m_left = False
 
-player = pygame.image.load('Pixel Adventure 1\Free\Main Characters\Pink Man\Fall (32x32).png').convert_alpha()
-player_Rect = player.get_rect(topleft = (80, 465))
-
-enemy1 = pygame.image.load(r'C:\Users\HP USER\OneDrive\Desktop\pygamuuu\Ghostpixxells_pixelfood\29_cookies_dish.png').convert_alpha()
-enemy1_rect = enemy1.get_rect(bottomright = (80, 140))
+m_up = False
+m_down = False
 
 
 while True:
 
+    screen.fill("#FBF3B9")
+
+    if m_right == True:
+        player_rect.right +=4
+
+    if m_left ==True:
+        player_rect.left -=4
     
-
-
-    screen.fill("#E1EEBC")
+    if m_up == True:
+        player_rect.top -=4
     
+    if m_down == True:
+        player_rect.bottom +=4
 
+    screen.blit(text, (200, 0))
+    
+    #since we struggle with coordinates think of it like this:
+    # ((200, 0))
+    #200 pixels rom the left(width)
+    #0 pixels from the top(height)
+
+    screen.blit(ground, (0, 350))
+
+    screen.blit(food1, (450, 200))
+
+    screen.blit(food2, (200, 150))
+
+    screen.blit(food3, food3_rect)
+
+    screen.blit(player, player_rect)
+
+    if player_rect.colliderect(food3_rect):
+        score +=1
+
+    if player_rect.left > 450: player_rect.left = 450
+    if player_rect.left < -2: player_rect.left = 0
+
+    if player_rect.bottom > 380: player_rect.bottom = 380
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        
         if event.type == KEYDOWN:
+            if event.key == K_UP:
+                m_up = True
+            if event.key == K_DOWN:
+                m_down = True
             if event.key == K_RIGHT:
-                print("moving right")
-                moving_right = True
+                m_right = True
+                #print("going riht")
             if event.key == K_LEFT:
-                print("moving left")
-                moving_left = True
+                m_left = True
+        
         if event.type == KEYUP:
+            if event.key == K_UP:
+                m_up = False
+            if event.key == K_DOWN:
+                m_down = False
             if event.key == K_RIGHT:
-                moving_right = False
+                m_right = False
+                print("going riht")
             if event.key == K_LEFT:
-                moving_left = False
+                m_left = False
 
-    screen.blit(b_o, (0, 0))
-    screen.blit(k_o, (160, 17))
-    house_x_poisition +=1
-    if house_x_poisition > 480: house_x_poisition = 0
-    screen.blit(house_surface, (house_x_poisition, 250))
-    
-# 2 big pepper
-#4 rodo
-#two big tomatoes
-#1 white onion with garlic
+    clock.tick(60)
 
-    if player_Rect.right > 500: player_Rect.right = 0
+    display.update()
 
-    player_Rect.right +=1
-    screen.blit(player, player_Rect)
-
-    screen.blit(enemy1, enemy1_rect)
-
-
-    pygame.display.update()
-    fps.tick(60)
+#1403
+#workout
+# 1) 13:48
